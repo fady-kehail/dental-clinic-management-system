@@ -4,4 +4,5 @@ node_modules
 dist
 build
 .prisma
-scripts
+scripts/
+uploads/

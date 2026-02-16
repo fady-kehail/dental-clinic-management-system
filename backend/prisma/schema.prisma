@@ -1,0 +1,127 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(PATIENT)
+  specialty String?
+  phoneNumber String?
+  createdAt DateTime @default(now())
+
+  appointments Appointment[] @relation("PatientAppointments")
+  doctorAppointments Appointment[] @relation("DentistAppointments")
+}
+
+model Dentist {
+  id          String   @id @default(uuid())
+  name        String
+  specialty   String
+  experience  Int      @default(0)
+  imageUrl    String?  @default("https://picsum.photos/seed/doc/200")
+  bio         String?
+  schedules   Schedule[]
+  appointments Appointment[]
+}
+
+model Schedule {
+  id         String   @id @default(uuid())
+  dentist    Dentist  @relation(fields: [dentistId], references: [id])
+  dentistId  String
+  dayOfWeek  String
+  startTime  String
+  endTime    String
+}
+
+model Appointment {
+  id        String   @id @default(uuid())
+  user      User     @relation("PatientAppointments", fields: [userId], references: [id])
+  userId    String
+  dentist   Dentist?  @relation(fields: [dentistId], references: [id])
+  dentistId String?
+  dentistUser User? @relation("DentistAppointments", fields: [dentistUserId], references: [id])
+  dentistUserId String?
+  date      DateTime
+  status    AppointmentStatus @default(PENDING)
+  notes     String?
+  createdAt DateTime @default(now())
+  emailSent Boolean  @default(false)
+  emailSentAt DateTime?
+  emailLogs EmailLog[]
+  emailReminders EmailReminder[]
+}
+
+enum Role {
+  ADMIN
+  PATIENT
+  DENTIST
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELED
+}
+
+model EmailLog {
+  id             String      @id @default(uuid())
+  appointmentId  String
+  recipientEmail String
+  emailType      EmailType
+  status         EmailStatus @default(PENDING)
+  sentAt         DateTime?
+  errorMessage   String?
+  retryCount     Int         @default(0)
+  createdAt      DateTime    @default(now())
+  appointment    Appointment @relation(fields: [appointmentId], references: [id])
+}
+
+model EmailReminder {
+  id            String         @id @default(uuid())
+  appointment   Appointment    @relation(fields: [appointmentId], references: [id])
+  appointmentId String
+  reminderType  ReminderType
+  scheduledAt   DateTime
+  status        ReminderStatus @default(PENDING)
+  sentAt        DateTime?
+  errorMessage  String?
+  retryCount    Int            @default(0)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([scheduledAt, status])
+}
+
+enum ReminderType {
+  TWENTY_FOUR_HOURS
+  TWO_HOURS
+}
+
+enum ReminderStatus {
+  PENDING
+  SENT
+  FAILED
+  CANCELLED
+}
+
+enum EmailType {
+  CONFIRMATION
+  UPDATE
+  CANCELLATION
+  REMINDER
+}
+
+enum EmailStatus {
+  PENDING
+  SENT
+  FAILED
+}

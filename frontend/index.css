@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+/* Custom Base Styles */
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+  background-color: #f9fafb; /* bg-gray-50 equivalent default */
+}
+
+/* Ensure touch targets are large enough */
+button, 
+a, 
+input, 
+select, 
+textarea {
+  touch-action: manipulation;
+}
+
+/* Base font settings usually handled by Tailwind Preflight, 
+   but ensuring sensible defaults if needed */
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+}

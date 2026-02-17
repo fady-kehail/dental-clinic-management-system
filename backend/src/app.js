@@ -50,7 +50,12 @@ app.use('/api/auth', authLimiter);
 
 // Serve static files from uploads directory
 const uploadsPath = path.join(__dirname, '../uploads');
+
+if (!fs.existsSync(uploadsPath)) {
+  fs.mkdirSync(uploadsPath);
+}
 app.use('/uploads', express.static(uploadsPath));
+
 
 // Body parser with size limit (10kb default, 1mb for API)
 app.use(express.json({ limit: '2mb' }));

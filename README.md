@@ -92,10 +92,6 @@ npm run dev
 - Set `VITE_API_URL` to your production API URL (e.g. `https://api.yourdomain.com/api`)
 - Build: `npm run build`
 
-## 🧪 Sample Admin Credentials
-- **Email**: `admin@dental.com`
-- **Password**: `admin`
-
 
 ## 🎮 Demo Mode
 

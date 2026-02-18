@@ -16,6 +16,7 @@ model User {
   specialty String?
   phoneNumber String?
   createdAt DateTime @default(now())
+  isDemo    Boolean  @default(false)
 
   appointments Appointment[] @relation("PatientAppointments")
   doctorAppointments Appointment[] @relation("DentistAppointments")

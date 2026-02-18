@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { getAppointments, updateAppointmentStatus, resendConfirmationEmail } from '../services/Api';
+import { getAppointments, updateAppointmentStatus, resendConfirmationEmail, resetDemoData } from '../services/Api';
 import { Appointment, AppointmentStatus, UserRole } from '../types';
 
 const AdminDashboard: React.FC<{onNavigate: (p: string) => void}> = ({onNavigate}) => {
@@ -41,6 +41,23 @@ const AdminDashboard: React.FC<{onNavigate: (p: string) => void}> = ({onNavigate
           >
             Manage Staff
           </button>
+          
+          <button 
+             onClick={async () => {
+                 if(window.confirm('Are you sure you want to reset all demo data? This cannot be undone.')) {
+                     try {
+                         await resetDemoData();
+                         alert('Demo data reset successfully!');
+                         window.location.reload();
+                     } catch (e) {
+                         alert('Failed to reset demo data. Ensure you are in Demo Mode.');
+                     }
+                 }
+             }}
+             className="flex-1 sm:flex-none px-4 py-2 bg-red-100 text-red-700 border border-red-200 rounded-lg hover:bg-red-200 font-medium text-center"
+           >
+             Reset Demo
+           </button>
         </div>
       </div>
 

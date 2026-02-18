@@ -117,3 +117,10 @@ export const saveSchedule = async (schedule: Omit<Schedule, 'id'>) => {
 export const deleteSchedule = async (id: string) => {
   await api.delete(`/dentists/schedules/${id}`);
 };
+
+// ================= DEMO =================
+
+export const resetDemoData = async () => {
+  const res = await api.post('/demo/reset');
+  return res.data;
+};

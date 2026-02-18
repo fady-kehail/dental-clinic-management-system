@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { login } from '../services/Api';
 import { User } from '../types';
@@ -20,13 +19,37 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onNavigate }) => {
     setError('');
     try {
       const response = await login(email, password);
-      const user = { id: response.id, name: response.name, email: response.email, role: response.role };
+      // Ensure user object matches expected structure
+      const user = { 
+          id: response.id, 
+          name: response.name, 
+          email: response.email, 
+          role: response.role,
+          isDemo: response.isDemo || false // Handle isDemo flag
+      };
       onLogin(user, response.token);
     } catch (err: any) {
       setError(err.response?.data?.message || err.message || 'Login failed');
     } finally {
       setLoading(false);
     }
+  };
+
+  const fillDemoCredentials = (role: 'ADMIN' | 'DOCTOR' | 'PATIENT') => {
+      switch(role) {
+          case 'ADMIN':
+              setEmail('demo.admin@clinic.com');
+              setPassword('Demo123!');
+              break;
+          case 'DOCTOR':
+              setEmail('demo.doctor@clinic.com');
+              setPassword('Demo123!');
+              break;
+           case 'PATIENT':
+              setEmail('demo.patient@clinic.com');
+              setPassword('Demo123!');
+              break;
+      }
   };
 
   return (
@@ -84,9 +107,41 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onNavigate }) => {
             </button>
           </div>
           
-          <div className="text-center">
-             <p className="text-xs text-gray-400">Try Admin Email: admin@dental.com / Password: admin</p>
+          {/* Demo Section */}
+          <div className="pt-6 border-t border-gray-100">
+             <div className="text-center mb-4">
+               <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">
+                  Try the Demo
+               </span>
+             </div>
+             <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                 <button
+                    type="button"
+                    onClick={() => fillDemoCredentials('ADMIN')}
+                    className="flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-xs font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none"
+                 >
+                   Admin
+                 </button>
+                 <button
+                    type="button"
+                    onClick={() => fillDemoCredentials('DOCTOR')}
+                    className="flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-xs font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none"
+                 >
+                   Doctor
+                 </button>
+                 <button
+                    type="button"
+                    onClick={() => fillDemoCredentials('PATIENT')}
+                    className="flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-xs font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none"
+                 >
+                   Patient
+                 </button>
+             </div>
+             <p className="mt-3 text-center text-xs text-gray-400">
+               Click to auto-fill demo credentials
+             </p>
           </div>
+
         </form>
       </div>
     </div>

@@ -73,6 +73,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/dentists', dentistRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/reminders', reminderRoutes);
+app.use('/api/demo', require('./routes/demoRoutes'));
 
 // Error Middleware
 app.use(errorHandler);

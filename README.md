@@ -97,6 +97,24 @@ npm run dev
 - **Password**: `admin`
 
 
+## 🎮 Demo Mode
+
+The application includes a fully functional Demo Mode for safe testing.
+
+### Enabling Demo Mode
+1. Set `DEMO_MODE=true` in `backend/.env`.
+2. Run migration: `npx prisma migrate dev`.
+3. Seed data: `node backend/prisma/seedDemo.js`.
+
+### Demo Credentials
+- **Admin**: `demo.admin@clinic.com` / `Demo123!`
+- **Doctor**: `demo.doctor@clinic.com` / `Demo123!`
+- **Patient**: `demo.patient@clinic.com` / `Demo123!`
+
+### Resetting Data
+Logged-in Admin users can reset the database to its initial demo state by clicking **"Reset Demo"** in the Admin Dashboard.
+**Note**: This action wipes all data and re-seeds the demo users.
+
 ## 📂 Project Structure
 ```text
 ├── backend/
